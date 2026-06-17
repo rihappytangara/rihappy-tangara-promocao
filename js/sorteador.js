@@ -1,3 +1,9 @@
+if (
+    sessionStorage.getItem("admin_logado")
+    !== "sim"
+) {
+    location.href = "admin.html";
+}
 async function carregarResumo() {
 
     const { data: cupons } = await supabase
