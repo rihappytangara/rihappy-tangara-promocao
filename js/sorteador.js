@@ -6,7 +6,7 @@ if (
 }
 async function carregarResumo() {
 
-    const { data: cupons } = await supabase
+    const { data: cupons } = await supabaseClient
         .from('cupons')
         .select('numero_sorte_final')
         .order('numero_sorte_final', { ascending: false })
@@ -17,7 +17,7 @@ async function carregarResumo() {
             cupons[0].numero_sorte_final;
     }
 
-    const { count } = await supabase
+    const { count } = await supabaseClient
         .from('sorteios')
         .select('*', { count: 'exact', head: true });
 
@@ -27,7 +27,7 @@ async function carregarResumo() {
 
 async function carregarHistorico() {
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('sorteios')
         .select(`
             numero_sorteado,
@@ -45,7 +45,7 @@ async function carregarHistorico() {
 
     for (const item of data) {
 
-        const { data: cliente } = await supabase
+        const { data: cliente } = await supabaseClient
             .from('clientes')
             .select('nome')
             .eq('id', item.cliente_id)
@@ -69,7 +69,7 @@ async function realizarSorteio() {
         return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .rpc('realizar_sorteio');
 
     if (error) {
