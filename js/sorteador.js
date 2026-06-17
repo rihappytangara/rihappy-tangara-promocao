@@ -1,4 +1,52 @@
+document
+.getElementById("btnSortear")
+.addEventListener("click", async () => {
 
-// Buscar maior numero_sorte_final.
-// Gerar número aleatório.
-// Localizar registro vencedor.
+    const resultado =
+        document.getElementById("resultado");
+
+    resultado.innerHTML =
+        "Realizando sorteio...";
+
+    const { data, error } =
+        await supabase.rpc(
+            "realizar_sorteio"
+        );
+
+    if (error) {
+
+        resultado.innerHTML =
+            "Erro: " + error.message;
+
+        return;
+    }
+
+    resultado.innerHTML = `
+        <h2>Número Sorteado</h2>
+
+        <div class="numero">
+            ${data.numero_sorteado}
+        </div>
+
+        <h2>Ganhador</h2>
+
+        <p><b>Nome:</b> ${data.nome}</p>
+        <p><b>CPF:</b> ${data.cpf}</p>
+        <p><b>Telefone:</b> ${data.telefone}</p>
+
+        <p><b>Cupom:</b> ${data.numero_cupom}</p>
+
+        <p>
+            <b>Intervalo:</b>
+            ${data.numero_inicial}
+            até
+            ${data.numero_final}
+        </p>
+
+        <p>
+            <b>Valor da Compra:</b>
+            R$ ${Number(data.valor_compra)
+                .toFixed(2)}
+        </p>
+    `;
+});
