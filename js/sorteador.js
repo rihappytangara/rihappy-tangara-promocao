@@ -109,3 +109,14 @@ document
 
 carregarResumo();
 carregarHistorico();
+document
+    .getElementById("btnSair")
+    .addEventListener("click", () => {
+
+        sessionStorage.removeItem(
+            "admin_logado"
+        );
+
+        location.href = "admin.html";
+
+    });
