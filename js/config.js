@@ -1,3 +1,3 @@
 
-const SUPABASE_URL='COLOCAR_URL';
-const SUPABASE_ANON_KEY='COLOCAR_CHAVE';
+const SUPABASE_URL = "https://ksltubnnpphxqhjycdau.supabase.co";
+const SUPABASE_ANON_KEY = "SUA_ANON_KEY";
