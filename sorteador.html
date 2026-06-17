@@ -1,17 +1,37 @@
-<h1>Sorteador</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sorteador</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-<input
-    id="numeroSorteado"
-    placeholder="Número sorteado"
-/>
+<header>
+    <img src="assets/logo.png" height="120">
+    <h1>Sorteador</h1>
+</header>
 
-<button id="btnSortear">
-    Localizar Ganhador
-</button>
+<div class="container">
 
-<div id="resultado"></div>
+    <button id="btnSortear">
+        Realizar Sorteio
+    </button>
 
-<button
-    onclick="window.location.href='index.html'">
-    Voltar
-</button>
+    <div id="resultado"></div>
+
+    <button
+        type="button"
+        class="botao-secundario"
+        onclick="window.location.href='index.html'">
+        Voltar ao Cadastro
+    </button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/sorteador.js"></script>
+
+</body>
+</html>
