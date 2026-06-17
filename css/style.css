@@ -1,0 +1,5 @@
+
+body{font-family:Arial,sans-serif;background:#6a4aa1;color:#fff;padding:30px}
+form{display:flex;flex-direction:column;gap:10px;max-width:500px}
+input,button{padding:12px}
+button{background:#e60012;color:white;border:0}
