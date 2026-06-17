@@ -1,59 +1,105 @@
-const SENHA_ADMIN = "Brinquedo1@";
+async function carregarResumo() {
 
-const senha = prompt("Digite a senha de acesso:");
+    const { data: cupons } = await supabase
+        .from('cupons')
+        .select('numero_sorte_final')
+        .order('numero_sorte_final', { ascending: false })
+        .limit(1);
 
-if (senha !== SENHA_ADMIN) {
-    alert("Acesso negado.");
-    window.location.href = "index.html";
-}document
-.getElementById("btnSortear")
-.addEventListener("click", async () => {
+    if (cupons && cupons.length > 0) {
+        document.getElementById('totalNumeros').innerText =
+            cupons[0].numero_sorte_final;
+    }
 
-    const resultado =
-        document.getElementById("resultado");
+    const { count } = await supabase
+        .from('sorteios')
+        .select('*', { count: 'exact', head: true });
 
-    resultado.innerHTML =
-        "Realizando sorteio...";
+    document.getElementById('totalSorteios').innerText =
+        count || 0;
+}
 
-    const { data, error } =
-        await supabase.rpc(
-            "realizar_sorteio"
-        );
+async function carregarHistorico() {
+
+    const { data, error } = await supabase
+        .from('sorteios')
+        .select(`
+            numero_sorteado,
+            created_at,
+            cliente_id
+        `)
+        .order('created_at', { ascending: false });
 
     if (error) {
-
-        resultado.innerHTML =
-            "Erro: " + error.message;
-
+        console.error(error);
         return;
     }
 
-    resultado.innerHTML = `
-        <h2>Número Sorteado</h2>
+    let html = '';
 
-        <div class="numero">
-            ${data.numero_sorteado}
-        </div>
+    for (const item of data) {
 
-        <h2>Ganhador</h2>
+        const { data: cliente } = await supabase
+            .from('clientes')
+            .select('nome')
+            .eq('id', item.cliente_id)
+            .single();
 
-        <p><b>Nome:</b> ${data.nome}</p>
-        <p><b>CPF:</b> ${data.cpf}</p>
-        <p><b>Telefone:</b> ${data.telefone}</p>
+        html += `
+            <tr>
+                <td>${new Date(item.created_at).toLocaleString('pt-BR')}</td>
+                <td>${item.numero_sorteado}</td>
+                <td>${cliente?.nome || ''}</td>
+            </tr>
+        `;
+    }
 
-        <p><b>Cupom:</b> ${data.numero_cupom}</p>
+    document.getElementById('historico').innerHTML = html;
+}
 
-        <p>
-            <b>Intervalo:</b>
-            ${data.numero_inicial}
-            até
-            ${data.numero_final}
-        </p>
+async function realizarSorteio() {
 
-        <p>
-            <b>Valor da Compra:</b>
-            R$ ${Number(data.valor_compra)
-                .toFixed(2)}
-        </p>
-    `;
-});
+    if (!confirm('Confirma realizar o sorteio?')) {
+        return;
+    }
+
+    const { data, error } = await supabase
+        .rpc('realizar_sorteio');
+
+    if (error) {
+        alert(error.message);
+        console.error(error);
+        return;
+    }
+
+    document.getElementById('numeroSorteado').innerText =
+        data.numero_sorteado;
+
+    document.getElementById('nome').innerText =
+        data.nome;
+
+    document.getElementById('cpf').innerText =
+        data.cpf;
+
+    document.getElementById('telefone').innerText =
+        data.telefone;
+
+    document.getElementById('cupom').innerText =
+        data.numero_cupom;
+
+    document.getElementById('valor').innerText =
+        Number(data.valor_compra).toFixed(2);
+
+    document.getElementById('faixa').innerText =
+        `${data.numero_inicial} até ${data.numero_final}`;
+
+    await carregarResumo();
+    await carregarHistorico();
+}
+
+document
+    .getElementById('btnSortear')
+    .addEventListener('click', realizarSorteio);
+
+carregarResumo();
+carregarHistorico();
