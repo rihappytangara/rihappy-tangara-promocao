@@ -1,4 +1,11 @@
-document
+const SENHA_ADMIN = "Brinquedo1@";
+
+const senha = prompt("Digite a senha de acesso:");
+
+if (senha !== SENHA_ADMIN) {
+    alert("Acesso negado.");
+    window.location.href = "index.html";
+}document
 .getElementById("btnSortear")
 .addEventListener("click", async () => {
 
