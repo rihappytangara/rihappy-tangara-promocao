@@ -2,30 +2,139 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Sorteador</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Sorteador Oficial</title>
+
 <link rel="stylesheet" href="css/style.css">
+
+<style>
+.painel{
+    max-width:900px;
+    margin:20px auto;
+}
+
+.cards{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.card{
+    flex:1;
+    min-width:220px;
+    background:#fff;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.numero-sorteado{
+    font-size:60px;
+    font-weight:bold;
+    color:#d40000;
+    text-align:center;
+    margin:20px 0;
+}
+
+.ganhador{
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.botoes{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:20px 0;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+}
+
+th, td{
+    border:1px solid #ddd;
+    padding:8px;
+}
+
+th{
+    background:#f2f2f2;
+}
+</style>
+
 </head>
 <body>
 
 <header>
     <img src="assets/logo.png" height="120">
-    <h1>Sorteador</h1>
+    <h1>Sorteador Oficial</h1>
 </header>
 
-<div class="container">
+<div class="painel">
 
-    <button id="btnSortear">
-        Realizar Sorteio
-    </button>
+    <div class="cards">
+        <div class="card">
+            <h3>Total de Números</h3>
+            <div id="totalNumeros">...</div>
+        </div>
 
-    <div id="resultado"></div>
+        <div class="card">
+            <h3>Sorteios Realizados</h3>
+            <div id="totalSorteios">...</div>
+        </div>
+    </div>
 
-    <button
-        type="button"
-        class="botao-secundario"
-        onclick="window.location.href='index.html'">
-        Voltar ao Cadastro
-    </button>
+    <div class="botoes">
+        <button id="btnSortear">
+            REALIZAR SORTEIO
+        </button>
+
+        <button onclick="location.href='consulta.html'">
+            Consultar Cupons
+        </button>
+
+        <button onclick="location.href='index.html'">
+            Voltar ao Cadastro
+        </button>
+    </div>
+
+    <div class="numero-sorteado" id="numeroSorteado">
+        -
+    </div>
+
+    <div class="ganhador" id="dadosGanhador">
+
+        <h2>Dados do Ganhador</h2>
+
+        <p><strong>Nome:</strong> <span id="nome"></span></p>
+        <p><strong>CPF:</strong> <span id="cpf"></span></p>
+        <p><strong>Telefone:</strong> <span id="telefone"></span></p>
+        <p><strong>Cupom:</strong> <span id="cupom"></span></p>
+        <p><strong>Compra:</strong> R$ <span id="valor"></span></p>
+        <p><strong>Faixa:</strong> <span id="faixa"></span></p>
+
+    </div>
+
+    <br>
+
+    <h2>Histórico de Sorteios</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Número</th>
+                <th>Cliente</th>
+            </tr>
+        </thead>
+        <tbody id="historico"></tbody>
+    </table>
 
 </div>
 
