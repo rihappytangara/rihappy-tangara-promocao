@@ -9,16 +9,33 @@
 <body>
 <header><img src="assets/logo.png" height="120"><h1>Cadastro de Cupons</h1></header>
 <form id="cadastro">
-<input placeholder="CPF" required>
-<input placeholder="Nome Completo" required>
-<input placeholder="Telefone" required>
-<input placeholder="Valor da Compra" required>
-<input placeholder="Número do Cupom" required>
-<input placeholder="PDV" required>
-<button>Cadastrar</button>
+
+    <input id="cpf" placeholder="CPF" required>
+
+    <input id="nome" placeholder="Nome Completo" required>
+
+    <input id="telefone" placeholder="Telefone" required>
+
+    <input id="valor" placeholder="Valor da Compra" required>
+
+    <input id="cupom" placeholder="Número do Cupom" required>
+
+    <select id="pdv" required>
+        <option value="">Selecione o PDV</option>
+        <option value="1">PDV 1</option>
+        <option value="2">PDV 2</option>
+    </select>
+
+    <button type="submit">
+        Cadastrar Cupom
+    </button>
+
 </form>
+
+<div id="resultado"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/cadastro.js"></script>
 </body>
 </html>
+
