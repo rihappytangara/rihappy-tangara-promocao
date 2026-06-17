@@ -1,7 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Consulta de Números da Sorte</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-<!DOCTYPE html><html><head><meta charset='utf-8'><title>Consulta</title>
-<link rel="stylesheet" href="css/style.css"></head>
-<body><h1>Consultar números da sorte</h1>
-<input id="cpf" placeholder="CPF"><button>Consultar</button>
+<header>
+    <img src="assets/logo.png" height="120">
+    <h1>Consulta de Números da Sorte</h1>
+</header>
+
+<form id="consulta">
+
+    <input
+        id="cpf"
+        placeholder="Digite seu CPF"
+        required
+    >
+
+    <button type="submit">
+        Consultar
+    </button>
+
+</form>
+
 <div id="resultado"></div>
-</body></html>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/consulta.js"></script>
+
+</body>
+</html>
