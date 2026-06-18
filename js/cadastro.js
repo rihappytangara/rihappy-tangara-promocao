@@ -94,17 +94,31 @@ document
    MÁSCARA CPF
 ================================== */
 
-document
-.getElementById("cpf")
+document.getElementById("cpf")
 .addEventListener("input", function(e){
 
-    let v = e.target.value.replace(/\D/g,'');
+    let valor = e.target.value;
 
-    v = v.replace(/(\d{3})(\d)/,'$1.$2');
-    v = v.replace(/(\d{3})(\d)/,'$1.$2');
-    v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+    valor = valor.replace(/\D/g,'');
 
-    e.target.value = v;
+    valor = valor.substring(0,11);
+
+    valor = valor.replace(
+        /^(\d{3})(\d)/,
+        '$1.$2'
+    );
+
+    valor = valor.replace(
+        /^(\d{3})\.(\d{3})(\d)/,
+        '$1.$2.$3'
+    );
+
+    valor = valor.replace(
+        /\.(\d{3})(\d)/,
+        '.$1-$2'
+    );
+
+    e.target.value = valor;
 
 });
 
@@ -113,23 +127,26 @@ document
    MÁSCARA TELEFONE
 ================================== */
 
-document
-.getElementById("telefone")
+document.getElementById("telefone")
 .addEventListener("input", function(e){
 
-    let v = e.target.value.replace(/\D/g,'');
+    let valor = e.target.value;
 
-    v = v.replace(
+    valor = valor.replace(/\D/g,'');
+
+    valor = valor.substring(0,11);
+
+    valor = valor.replace(
         /^(\d{2})(\d)/,
         '($1) $2'
     );
 
-    v = v.replace(
+    valor = valor.replace(
         /(\d{5})(\d)/,
         '$1-$2'
     );
 
-    e.target.value = v;
+    e.target.value = valor;
 
 });
 
@@ -138,28 +155,27 @@ document
    MÁSCARA VALOR
 ================================== */
 
-document
-.getElementById("valor")
+document.getElementById("valor")
 .addEventListener("input", function(e){
 
-    let v = e.target.value.replace(/\D/g,'');
+    let valor = e.target.value;
 
-    if(v === ''){
+    valor = valor.replace(/\D/g,'');
+
+    if(!valor){
         e.target.value = '';
         return;
     }
 
-    v = (
-        parseInt(v,10) / 100
-    )
-    .toFixed(2)
-    .replace('.',',');
+    valor = (parseInt(valor,10) / 100)
+        .toLocaleString(
+            'pt-BR',
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
 
-    v = v.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        '.'
-    );
-
-    e.target.value = v;
+    e.target.value = 'R$ ' + valor;
 
 });
