@@ -3,7 +3,9 @@ document
 .addEventListener("submit", async (e) => {
 
     e.preventDefault();
-
+    const resultado =
+        document.getElementById("resultado");
+    
     const cpf = document
         .getElementById("cpf")
         .value
@@ -19,13 +21,14 @@ document
         .value
         .replace(/\D/g,'');
 
-    const valor = parseFloat(
-        document
-            .getElementById("valor")
-            .value
-            .replace(/\./g,'')
-            .replace(',','.')
-    );
+const valor = parseFloat(
+    document
+        .getElementById("valor")
+        .value
+        .replace('R$ ','')
+        .replace(/\./g,'')
+        .replace(',','.')
+);
 
     const cupom = document
         .getElementById("cupom")
@@ -35,7 +38,38 @@ document
     const pdv = parseInt(
         document.getElementById("pdv").value
     );
+if(cpf.length !== 11){
 
+    resultado.innerHTML = `
+        <div style="color:red;">
+            CPF inválido.
+        </div>
+    `;
+
+    return;
+}
+
+if(telefone.length !== 11){
+
+    resultado.innerHTML = `
+        <div style="color:red;">
+            Telefone inválido.
+        </div>
+    `;
+
+    return;
+}
+
+if(isNaN(valor) || valor <= 0){
+
+    resultado.innerHTML = `
+        <div style="color:red;">
+            Valor da compra inválido.
+        </div>
+    `;
+
+    return;
+}
     const { data, error } = await supabaseClient.rpc(
         "registrar_cupom",
         {
@@ -47,10 +81,7 @@ document
             p_pdv: pdv
         }
     );
-
-    const resultado =
-        document.getElementById("resultado");
-
+    
     if(error){
 
         resultado.innerHTML = `
