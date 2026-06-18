@@ -4,13 +4,34 @@ document
 
     e.preventDefault();
 
-    const cpf = document.getElementById("cpf").value;
-    const nome = document.getElementById("nome").value;
-    const telefone = document.getElementById("telefone").value;
+    const cpf = document
+        .getElementById("cpf")
+        .value
+        .replace(/\D/g,'');
+
+    const nome = document
+        .getElementById("nome")
+        .value
+        .trim();
+
+    const telefone = document
+        .getElementById("telefone")
+        .value
+        .replace(/\D/g,'');
+
     const valor = parseFloat(
-        document.getElementById("valor").value.replace(",", ".")
+        document
+            .getElementById("valor")
+            .value
+            .replace(/\./g,'')
+            .replace(',','.')
     );
-    const cupom = document.getElementById("cupom").value;
+
+    const cupom = document
+        .getElementById("cupom")
+        .value
+        .trim();
+
     const pdv = parseInt(
         document.getElementById("pdv").value
     );
@@ -31,8 +52,14 @@ document
         document.getElementById("resultado");
 
     if(error){
-        resultado.innerHTML =
-            `<strong>Erro:</strong> ${error.message}`;
+
+        resultado.innerHTML = `
+            <div style="color:red;">
+                <strong>Erro:</strong>
+                ${error.message}
+            </div>
+        `;
+
         return;
     }
 
@@ -53,4 +80,86 @@ document
             </strong>
         </p>
     `;
+
+    document.getElementById("cadastro").reset();
+
+    document
+        .getElementById("cpf")
+        .focus();
+
+});
+
+
+/* ==================================
+   MÁSCARA CPF
+================================== */
+
+document
+.getElementById("cpf")
+.addEventListener("input", function(e){
+
+    let v = e.target.value.replace(/\D/g,'');
+
+    v = v.replace(/(\d{3})(\d)/,'$1.$2');
+    v = v.replace(/(\d{3})(\d)/,'$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+
+    e.target.value = v;
+
+});
+
+
+/* ==================================
+   MÁSCARA TELEFONE
+================================== */
+
+document
+.getElementById("telefone")
+.addEventListener("input", function(e){
+
+    let v = e.target.value.replace(/\D/g,'');
+
+    v = v.replace(
+        /^(\d{2})(\d)/,
+        '($1) $2'
+    );
+
+    v = v.replace(
+        /(\d{5})(\d)/,
+        '$1-$2'
+    );
+
+    e.target.value = v;
+
+});
+
+
+/* ==================================
+   MÁSCARA VALOR
+================================== */
+
+document
+.getElementById("valor")
+.addEventListener("input", function(e){
+
+    let v = e.target.value.replace(/\D/g,'');
+
+    if(v === ''){
+        e.target.value = '';
+        return;
+    }
+
+    v = (
+        parseInt(v,10) / 100
+    )
+    .toFixed(2)
+    .replace('.',',');
+
+    v = v.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        '.'
+    );
+
+    e.target.value = v;
+
 });
