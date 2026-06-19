@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Cadastro de Cupons</title>
+
 <link rel="stylesheet" href="css/style.css">
+
 </head>
+
 <body>
+
 <header class="topo">
 
     <img
@@ -22,60 +28,107 @@
         class="banner-promo"
         alt="Promoção"
     >
+
 </header>
+
 <form id="cadastro">
 
     <input
-    id="cpf"
-    inputmode="numeric"
-    autocomplete="off"
-    placeholder="CPF"
-    maxlength="14"
-    required
->
-
-    <input id="nome" placeholder="Nome Completo" required>
-
-   <input
-    id="telefone"
-    inputmode="numeric"
-    autocomplete="off"
-    placeholder="Telefone"
-    maxlength="15"
-    required
->
+        id="cpf"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="CPF"
+        maxlength="14"
+        required
+    >
 
     <input
-    id="valor"
-    inputmode="numeric"
-    autocomplete="off"
-    placeholder="Valor da Compra"
-    maxlength="12"
-    required
->
+        id="nome"
+        placeholder="Nome Completo"
+        required
+    >
 
-    <input id="cupom" placeholder="Número do Cupom" required>
+    <input
+        id="telefone"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="Telefone"
+        maxlength="15"
+        required
+    >
 
-    <select id="pdv" required>
-        <option value="">Selecione o PDV</option>
-        <option value="1">PDV 1</option>
-        <option value="2">PDV 2</option>
-    </select>
+    <hr>
 
-    <button type="submit">
+    <h3>Dados da NFC-e</h3>
+
+    <input
+        id="url_nfce"
+        type="url"
+        placeholder="Cole aqui a URL da NFC-e"
+        required
+    >
+
+    <button
+        type="button"
+        id="validarNota"
+    >
+        Validar NFC-e
+    </button>
+
+    <div id="dadosNota"></div>
+
+    <!-- Campos preenchidos automaticamente -->
+
+    <input
+        type="hidden"
+        id="numero_nf"
+    >
+
+    <input
+        type="hidden"
+        id="valor_compra"
+    >
+
+    <input
+        type="hidden"
+        id="chave_nf"
+    >
+
+    <input
+        type="hidden"
+        id="data_venda"
+    >
+
+    <input
+        type="hidden"
+        id="emitente"
+    >
+
+    <br>
+
+    <button
+        type="submit"
+        id="btnCadastrar"
+        disabled
+    >
         Cadastrar Cupom
     </button>
+
     <button
-    type="button"
-    onclick="window.location.href='consulta.html'">
-    Consultar Números da Sorte
+        type="button"
+        onclick="window.location.href='consulta.html'"
+    >
+        Consultar Números da Sorte
     </button>
+
 </form>
 
 <div id="resultado"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="js/config.js"></script>
 <script src="js/cadastro.js"></script>
+
 </body>
 </html>
-
