@@ -146,16 +146,6 @@ async function validarNfce(url) {
 /* =========================
    CADASTRAR CUPOM
 ========================= */
-const erroPeriodo =
-  validarPeriodoPromocao();
-
-if (erroPeriodo) {
-
-  resultado.innerHTML =
-    `<span style="color:red">${erroPeriodo}</span>`;
-
-  return;
-}
 
    document
   .getElementById("cadastro")
@@ -166,6 +156,16 @@ if (erroPeriodo) {
     const resultado =
       document.getElementById("resultado");
 
+     const erroPeriodo =
+    validarPeriodoPromocao();
+
+if (erroPeriodo) {
+
+    resultado.innerHTML =
+        `<span style="color:red">${erroPeriodo}</span>`;
+
+    return;
+}
     if (!notaValidada) {
 
       resultado.innerHTML =
