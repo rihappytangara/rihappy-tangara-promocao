@@ -351,7 +351,7 @@ function validarPeriodoPromocao() {
     new Date(CONFIG.DATA_FIM + "T23:59:59");
 
   if (hoje < inicio) {
-    return "Promoção ainda não iniciou.";
+    return "Compra anterior a Promoção.";
   }
 
   if (hoje > fim) {
