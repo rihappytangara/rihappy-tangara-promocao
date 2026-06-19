@@ -198,27 +198,10 @@ document
             document.getElementById(
               "numero_nf"
             ).value,
-const dataBr =
-  document.getElementById(
-    "data_venda"
-  ).value;
-
-let dataIso = null;
-
-if (dataBr) {
-
-  const partes =
-    dataBr.match(
-      /(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})/
-    );
-
-  if (partes) {
-
-    dataIso =
-      `${partes[3]}-${partes[2]}-${partes[1]} ` +
-      `${partes[4]}:${partes[5]}:${partes[6]}`;
-  }
-}
+          p_data_venda:
+            document.getElementById(
+              "data_venda"
+            ).value,
           p_chave_nf:
             document.getElementById(
               "chave_nf"
