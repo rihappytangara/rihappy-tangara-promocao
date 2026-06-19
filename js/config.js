@@ -6,3 +6,19 @@ const supabaseClient = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
+
+const CONFIG = {
+
+  PROMOCAO_ATIVA: true,
+
+  DATA_INICIO: "2026-07-01",
+
+  DATA_FIM: "2027-01-01",
+
+  VALOR_MINIMO_COMPRA: 1,
+
+  EMPRESAS_PERMITIDAS: [
+    "TANGARA LUDIQUE LTDA"
+  ]
+
+};
