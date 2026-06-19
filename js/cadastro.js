@@ -78,7 +78,26 @@ async function validarNfce(url) {
     );
 
     const dados = await resposta.json();
+const EMPRESA_PERMITIDA =
+  "TANGARA LUDIQUE LTDA";
 
+if (
+  !dados.emitente ||
+  dados.emitente.trim().toUpperCase() !==
+  EMPRESA_PERMITIDA
+) {
+
+  notaValidada = false;
+
+  document.getElementById(
+    "btnCadastrar"
+  ).disabled = true;
+
+  dadosNota.innerHTML =
+    "<span style='color:red'>Esta NFC-e não pertence à promoção.</span>";
+
+  return;
+}
     if (!dados.sucesso) {
 
       notaValidada = false;
