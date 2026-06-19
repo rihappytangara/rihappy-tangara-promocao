@@ -11,7 +11,7 @@ const CONFIG = {
 
   PROMOCAO_ATIVA: true,
 
-  DATA_INICIO: "2026-07-01",
+  DATA_INICIO: "2026-06-01",
 
   DATA_FIM: "2027-01-01",
 
