@@ -182,37 +182,56 @@ document
         .value
         .replace(/\D/g, "");
 
-    const { data, error } =
-      await supabaseClient.rpc(
-        "registrar_cupom",
-        {
-          p_cpf: cpf,
-          p_nome: nome,
-          p_telefone: telefone,
-          p_valor_compra: parseFloat(
-            document.getElementById(
-              "valor_compra"
-            ).value
-          ),
-          p_numero_nf:
-            document.getElementById(
-              "numero_nf"
-            ).value,
-          p_data_venda:
-            document.getElementById(
-              "data_venda"
-            ).value,
-          p_chave_nf:
-            document.getElementById(
-              "chave_nf"
-            ).value,
-          p_emitente:
-            document.getElementById(
-              "emitente"
-            ).value,
-          p_url_nfce: urlNfceLida
-        }
-      );
+const dataBr =
+  document.getElementById(
+    "data_venda"
+  ).value;
+
+let dataIso = null;
+
+if (dataBr) {
+
+  const partes =
+    dataBr.match(
+      /(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):(\d{2})/
+    );
+
+  if (partes) {
+
+    dataIso =
+      `${partes[3]}-${partes[2]}-${partes[1]} ` +
+      `${partes[4]}:${partes[5]}:${partes[6]}`;
+  }
+}
+
+const { data, error } =
+  await supabaseClient.rpc(
+    "registrar_cupom",
+    {
+      p_cpf: cpf,
+      p_nome: nome,
+      p_telefone: telefone,
+      p_valor_compra: parseFloat(
+        document.getElementById(
+          "valor_compra"
+        ).value
+      ),
+      p_numero_nf:
+        document.getElementById(
+          "numero_nf"
+        ).value,
+      p_data_venda: dataIso,
+      p_chave_nf:
+        document.getElementById(
+          "chave_nf"
+        ).value,
+      p_emitente:
+        document.getElementById(
+          "emitente"
+        ).value,
+      p_url_nfce: urlNfceLida
+    }
+  );
 
     if (error) {
 
