@@ -81,3 +81,35 @@ document
     resultado.innerHTML = html;
 
 });
+/* ==================================
+   MÁSCARA CPF
+================================== */
+
+document.getElementById("cpf")
+.addEventListener("input", function(e){
+
+    let valor = e.target.value;
+
+    valor = valor.replace(/\D/g,'');
+
+    valor = valor.substring(0,11);
+
+    valor = valor.replace(
+        /^(\d{3})(\d)/,
+        '$1.$2'
+    );
+
+    valor = valor.replace(
+        /^(\d{3})\.(\d{3})(\d)/,
+        '$1.$2.$3'
+    );
+
+    valor = valor.replace(
+        /\.(\d{3})(\d)/,
+        '.$1-$2'
+    );
+
+    e.target.value = valor;
+
+});
+
