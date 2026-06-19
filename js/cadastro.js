@@ -1,548 +1,298 @@
-/* ==================================
-   VALIDAR NFC-E
-================================== */
-
 let notaValidada = false;
-
 let urlNfceLida = "";
 
-const btnQrCode =
-    document.getElementById("btnQrCode");
+/* =========================
+   LEITOR QR CODE
+========================= */
 
-btnQrCode.addEventListener(
-    "click",
-    iniciarLeitorQr
-);
+document
+  .getElementById("btnQrCode")
+  .addEventListener("click", iniciarLeitorQr);
 
 async function iniciarLeitorQr() {
 
-    const reader =
-        document.getElementById("reader");
+  const reader =
+    document.getElementById("reader");
 
-    reader.style.display = "block";
+  reader.style.display = "block";
 
-    const html5QrCode =
-        new Html5Qrcode("reader");
+  const html5QrCode =
+    new Html5Qrcode("reader");
 
-    try {
+  try {
 
-        await html5QrCode.start(
-            {
-                facingMode: "environment"
-            },
-            {
-                fps: 10,
-                qrbox: 250
-            },
-            async (textoLido) => {
+    await html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: 250
+      },
+      async (textoLido) => {
 
-                await html5QrCode.stop();
-
-                reader.style.display = "none";
-
-                urlNfceLida = textoLido;
-
-                validarNfce(textoLido);
-
-            }
-        );
-
-    } catch (erro) {
+        await html5QrCode.stop();
 
         reader.style.display = "none";
 
-        document.getElementById(
-            "dadosNota"
-        ).innerHTML = `
-            <div style="color:red;">
-                Não foi possível acessar a câmera.
-            </div>
-        `;
+        urlNfceLida = textoLido;
 
-        console.error(erro);
-    }
+        validarNfce(textoLido);
+      }
+    );
 
+  } catch (erro) {
+
+    console.error(erro);
+
+    reader.style.display = "none";
+
+    document.getElementById("dadosNota").innerHTML =
+      "<span style='color:red'>Não foi possível acessar a câmera.</span>";
+  }
 }
+
+/* =========================
+   VALIDAR NFC-E
+========================= */
+
 async function validarNfce(url) {
 
-    const dadosNota =
-        document.getElementById("dadosNota");
+  const dadosNota =
+    document.getElementById("dadosNota");
 
-    dadosNota.innerHTML = `
-        <div>
-            Validando NFC-e...
-        </div>
-    `;
+  dadosNota.innerHTML =
+    "Validando NFC-e...";
 
-    try {
+  try {
 
-        const resposta = await fetch(
-            "https://ksltubnnpphxqhjycdau.supabase.co/functions/v1/validar-nfce",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    url
-                })
-            }
-        );
+    const resposta = await fetch(
+      "https://ksltubnnpphxqhjycdau.supabase.co/functions/v1/validar-nfce",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          url
+        })
+      }
+    );
 
-        const dados =
-            await resposta.json();
+    const dados = await resposta.json();
 
-        if (!dados.sucesso) {
+    if (!dados.sucesso) {
 
-            notaValidada = false;
+      notaValidada = false;
 
-            document
-                .getElementById("btnCadastrar")
-                .disabled = true;
+      document.getElementById(
+        "btnCadastrar"
+      ).disabled = true;
 
-            dadosNota.innerHTML = `
-                <div style="color:red;">
-                    ${dados.erro}
-                </div>
-            `;
+      dadosNota.innerHTML =
+        `<span style="color:red">${dados.erro}</span>`;
 
-            return;
-        }
-
-        document.getElementById(
-            "numero_nf"
-        ).value =
-            dados.numero_nf;
-
-        document.getElementById(
-            "valor_compra"
-        ).value =
-            dados.valor;
-
-        document.getElementById(
-            "chave_nf"
-        ).value =
-            dados.chave_nf;
-
-        document.getElementById(
-            "data_venda"
-        ).value =
-            dados.data_venda;
-
-        document.getElementById(
-            "emitente"
-        ).value =
-            dados.emitente;
-
-        notaValidada = true;
-
-        document
-            .getElementById("btnCadastrar")
-            .disabled = false;
-
-        dadosNota.innerHTML = `
-            <div style="color:green;">
-                <p>
-                    <strong>Empresa:</strong>
-                    ${dados.emitente}
-                </p>
-
-                <p>
-                    <strong>NFC-e:</strong>
-                    ${dados.numero_nf}
-                </p>
-
-                <p>
-                    <strong>Valor:</strong>
-                    R$ ${Number(dados.valor).toLocaleString(
-                        "pt-BR",
-                        {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }
-                    )}
-                </p>
-
-                <p>
-                    NFC-e validada com sucesso.
-                </p>
-            </div>
-        `;
-
-    } catch (erro) {
-
-        notaValidada = false;
-
-        document
-            .getElementById("btnCadastrar")
-            .disabled = true;
-
-        dadosNota.innerHTML = `
-            <div style="color:red;">
-                Erro ao validar NFC-e.
-            </div>
-        `;
-
-        console.error(erro);
-
+      return;
     }
 
+    document.getElementById(
+      "numero_nf"
+    ).value = dados.numero_nf;
+
+    document.getElementById(
+      "valor_compra"
+    ).value = dados.valor;
+
+    document.getElementById(
+      "chave_nf"
+    ).value = dados.chave_nf;
+
+    document.getElementById(
+      "data_venda"
+    ).value = dados.data_venda;
+
+    document.getElementById(
+      "emitente"
+    ).value = dados.emitente;
+
+    notaValidada = true;
+
+    document.getElementById(
+      "btnCadastrar"
+    ).disabled = false;
+
+    dadosNota.innerHTML = `
+      <div style="color:green">
+        <strong>Empresa:</strong> ${dados.emitente}<br>
+        <strong>NFC-e:</strong> ${dados.numero_nf}<br>
+        <strong>Valor:</strong> R$ ${Number(dados.valor).toLocaleString("pt-BR",{minimumFractionDigits:2})}<br>
+        NFC-e validada com sucesso.
+      </div>
+    `;
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    notaValidada = false;
+
+    document.getElementById(
+      "btnCadastrar"
+    ).disabled = true;
+
+    dadosNota.innerHTML =
+      "<span style='color:red'>Erro ao validar NFC-e.</span>";
+  }
 }
 
-document
-.getElementById("validarNota")
-.addEventListener("click", async () => {
-
-    const url = document
-        .getElementById("url_nfce")
-        .value
-        .trim();
-
-    const dadosNota =
-        document.getElementById("dadosNota");
-
-    if (!url) {
-
-        dadosNota.innerHTML = `
-            <div style="color:red;">
-                Informe a URL da NFC-e.
-            </div>
-        `;
-
-        return;
-    }
-
-    dadosNota.innerHTML = `
-        <div>
-            Validando NFC-e...
-        </div>
-    `;
-
-    try {
-
-        const resposta = await fetch(
-            "https://ksltubnnpphxqhjycdau.supabase.co/functions/v1/validar-nfce",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    url
-                })
-            }
-        );
-
-        const dados = await resposta.json();
-
-        if (!dados.sucesso) {
-
-            notaValidada = false;
-
-            dadosNota.innerHTML = `
-                <div style="color:red;">
-                    ${dados.erro || "NFC-e inválida"}
-                </div>
-            `;
-
-            document
-                .getElementById("btnCadastrar")
-                .disabled = true;
-
-            return;
-        }
-
-        document.getElementById("numero_nf").value =
-            dados.numero_nf;
-
-        document.getElementById("valor_compra").value =
-            dados.valor;
-
-        document.getElementById("chave_nf").value =
-            dados.chave_nf;
-
-        document.getElementById("data_venda").value =
-            dados.data_venda;
-
-        document.getElementById("emitente").value =
-            dados.emitente;
-
-        notaValidada = true;
-
-        document
-            .getElementById("btnCadastrar")
-            .disabled = false;
-
-        dadosNota.innerHTML = `
-            <div style="color:green;">
-                <p>
-                    <strong>Empresa:</strong>
-                    ${dados.emitente}
-                </p>
-
-                <p>
-                    <strong>NFC-e:</strong>
-                    ${dados.numero_nf}
-                </p>
-
-                <p>
-                    <strong>Valor:</strong>
-                    R$ ${Number(dados.valor)
-                        .toLocaleString(
-                            "pt-BR",
-                            {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            }
-                        )}
-                </p>
-
-                <p>
-                    NFC-e validada com sucesso.
-                </p>
-            </div>
-        `;
-
-    } catch (erro) {
-
-        notaValidada = false;
-
-        document
-            .getElementById("btnCadastrar")
-            .disabled = true;
-
-        dadosNota.innerHTML = `
-            <div style="color:red;">
-                Erro ao validar NFC-e.
-            </div>
-        `;
-
-        console.error(erro);
-    }
-
-});
-
-
-/* ==================================
+/* =========================
    CADASTRAR CUPOM
-================================== */
+========================= */
 
 document
-.getElementById("cadastro")
-.addEventListener("submit", async (e) => {
+  .getElementById("cadastro")
+  .addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
     const resultado =
-        document.getElementById("resultado");
+      document.getElementById("resultado");
 
     if (!notaValidada) {
 
-        resultado.innerHTML = `
-            <div style="color:red;">
-                Valide a NFC-e antes de cadastrar.
-            </div>
-        `;
+      resultado.innerHTML =
+        "<span style='color:red'>Valide a NFC-e antes de cadastrar.</span>";
 
-        return;
+      return;
     }
 
-    const cpf = document
+    const cpf =
+      document
         .getElementById("cpf")
         .value
-        .replace(/\D/g, '');
+        .replace(/\D/g, "");
 
-    const nome = document
+    const nome =
+      document
         .getElementById("nome")
         .value
         .trim();
 
-    const telefone = document
+    const telefone =
+      document
         .getElementById("telefone")
         .value
-        .replace(/\D/g, '');
-
-    if (cpf.length !== 11) {
-
-        resultado.innerHTML = `
-            <div style="color:red;">
-                CPF inválido.
-            </div>
-        `;
-
-        return;
-    }
-
-    if (telefone.length !== 11) {
-
-        resultado.innerHTML = `
-            <div style="color:red;">
-                Telefone inválido.
-            </div>
-        `;
-
-        return;
-    }
-
-    resultado.innerHTML = `
-        <div>
-            Processando cadastro...
-        </div>
-    `;
+        .replace(/\D/g, "");
 
     const { data, error } =
-        await supabaseClient.rpc(
-            "registrar_cupom",
-            {
-
-                p_cpf: cpf,
-
-                p_nome: nome,
-
-                p_telefone: telefone,
-
-                p_valor_compra: parseFloat(
-                    document.getElementById(
-                        "valor_compra"
-                    ).value
-                ),
-
-                p_numero_nf:
-                    document.getElementById(
-                        "numero_nf"
-                    ).value,
-
-                p_data_venda:
-                    document.getElementById(
-                        "data_venda"
-                    ).value,
-
-                p_chave_nf:
-                    document.getElementById(
-                        "chave_nf"
-                    ).value,
-
-                p_emitente:
-                    document.getElementById(
-                        "emitente"
-                    ).value,
-
-p_url_nfce: urlNfceLida
-
-            }
-        );
+      await supabaseClient.rpc(
+        "registrar_cupom",
+        {
+          p_cpf: cpf,
+          p_nome: nome,
+          p_telefone: telefone,
+          p_valor_compra: parseFloat(
+            document.getElementById(
+              "valor_compra"
+            ).value
+          ),
+          p_numero_nf:
+            document.getElementById(
+              "numero_nf"
+            ).value,
+          p_data_venda:
+            document.getElementById(
+              "data_venda"
+            ).value,
+          p_chave_nf:
+            document.getElementById(
+              "chave_nf"
+            ).value,
+          p_emitente:
+            document.getElementById(
+              "emitente"
+            ).value,
+          p_url_nfce: urlNfceLida
+        }
+      );
 
     if (error) {
 
-        resultado.innerHTML = `
-            <div style="color:red;">
-                <strong>Erro:</strong>
-                ${error.message}
-            </div>
-        `;
+      resultado.innerHTML =
+        `<span style="color:red">${error.message}</span>`;
 
-        return;
+      return;
     }
 
     resultado.innerHTML = `
-        <h3>
-            Cadastro realizado com sucesso
-        </h3>
-
-        <p>
-            Quantidade de números:
-            <strong>
-                ${data.quantidade}
-            </strong>
-        </p>
-
-        <p>
-            Seus números da sorte:
-            <strong>
-                ${data.numero_inicial}
-                até
-                ${data.numero_final}
-            </strong>
-        </p>
+      <h3>Cadastro realizado com sucesso</h3>
+      <p>Quantidade: <strong>${data.quantidade}</strong></p>
+      <p>Números da sorte:</p>
+      <strong>
+        ${data.numero_inicial}
+        até
+        ${data.numero_final}
+      </strong>
     `;
 
-    document
-        .getElementById("cadastro")
-        .reset();
-
-    document
-        .getElementById("btnCadastrar")
-        .disabled = true;
-
-    document
-        .getElementById("dadosNota")
-        .innerHTML = "";
+    document.getElementById(
+      "btnCadastrar"
+    ).disabled = true;
 
     notaValidada = false;
+  });
 
-    document
-        .getElementById("cpf")
-        .focus();
-
-});
-
-
-/* ==================================
+/* =========================
    MÁSCARA CPF
-================================== */
+========================= */
 
-document.getElementById("cpf")
-.addEventListener("input", function(e){
+document
+  .getElementById("cpf")
+  .addEventListener("input", (e) => {
 
-    let valor = e.target.value;
+    let v =
+      e.target.value.replace(/\D/g, "");
 
-    valor = valor.replace(/\D/g,'');
+    v = v.substring(0, 11);
 
-    valor = valor.substring(0,11);
-
-    valor = valor.replace(
-        /^(\d{3})(\d)/,
-        '$1.$2'
+    v = v.replace(
+      /^(\d{3})(\d)/,
+      "$1.$2"
     );
 
-    valor = valor.replace(
-        /^(\d{3})\.(\d{3})(\d)/,
-        '$1.$2.$3'
+    v = v.replace(
+      /^(\d{3})\.(\d{3})(\d)/,
+      "$1.$2.$3"
     );
 
-    valor = valor.replace(
-        /\.(\d{3})(\d)/,
-        '.$1-$2'
+    v = v.replace(
+      /\.(\d{3})(\d)/,
+      ".$1-$2"
     );
 
-    e.target.value = valor;
+    e.target.value = v;
+  });
 
-});
-
-
-/* ==================================
+/* =========================
    MÁSCARA TELEFONE
-================================== */
+========================= */
 
-document.getElementById("telefone")
-.addEventListener("input", function(e){
+document
+  .getElementById("telefone")
+  .addEventListener("input", (e) => {
 
-    let valor = e.target.value;
+    let v =
+      e.target.value.replace(/\D/g, "");
 
-    valor = valor.replace(/\D/g,'');
+    v = v.substring(0, 11);
 
-    valor = valor.substring(0,11);
-
-    valor = valor.replace(
-        /^(\d{2})(\d)/,
-        '($1) $2'
+    v = v.replace(
+      /^(\d{2})(\d)/,
+      "($1) $2"
     );
 
-    valor = valor.replace(
-        /(\d{5})(\d)/,
-        '$1-$2'
+    v = v.replace(
+      /(\d{5})(\d)/,
+      "$1-$2"
     );
 
-    e.target.value = valor;
-
-});
+    e.target.value = v;
+  });
