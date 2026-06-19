@@ -4,8 +4,10 @@ document
 
     e.preventDefault();
 
-    const cpf =
-        document.getElementById("cpf").value;
+    const cpf = document
+        .getElementById("cpf")
+        .value
+        .replace(/\D/g,'');
 
     const resultado =
         document.getElementById("resultado");
