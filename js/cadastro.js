@@ -156,7 +156,8 @@ if (erroPeriodo) {
 
   return;
 }
-document
+
+   document
   .getElementById("cadastro")
   .addEventListener("submit", async (e) => {
 
