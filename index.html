@@ -61,19 +61,36 @@
 
     <h3>Dados da NFC-e</h3>
 
-    <input
-        id="url_nfce"
-        type="url"
-        placeholder="Cole aqui a URL da NFC-e"
-        required
-    >
+<input
+    id="url_nfce"
+    type="url"
+    placeholder="Cole ou leia o QR Code da NFC-e"
+    required
+>
 
-    <button
-        type="button"
-        id="validarNota"
-    >
-        Validar NFC-e
-    </button>
+<button
+    type="button"
+    id="btnQrCode"
+>
+    Ler QR Code
+</button>
+
+<div
+    id="reader"
+    style="
+        display:none;
+        width:100%;
+        max-width:400px;
+        margin:15px auto;
+    "
+></div>
+
+<button
+    type="button"
+    id="validarNota"
+>
+    Validar NFC-e
+</button>
 
     <div id="dadosNota"></div>
 
@@ -126,6 +143,8 @@
 <div id="resultado"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <script src="js/config.js"></script>
 <script src="js/cadastro.js"></script>
