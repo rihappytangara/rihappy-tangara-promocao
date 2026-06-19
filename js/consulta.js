@@ -40,7 +40,7 @@ document
 
         <table border="1" cellpadding="8">
             <tr>
-                <th>Cupom</th>
+                <th>NFC-e</th>
                 <th>Valor</th>
                 <th>Qtd. Números</th>
                 <th>Números da Sorte</th>
@@ -55,7 +55,7 @@ document
 
         html += `
             <tr>
-                <td>${item.numero_cupom}</td>
+                <td>${item.numero_nf}</td>
                 <td>R$ ${item.valor_compra}</td>
                 <td>${item.qtde_numeros}</td>
                 <td>
