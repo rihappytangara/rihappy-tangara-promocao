@@ -203,7 +203,17 @@ if (dataBr) {
       `${partes[4]}:${partes[5]}:${partes[6]}`;
   }
 }
+     
+if (partes) {
 
+  dataIso =
+    `${partes[3]}-${partes[2]}-${partes[1]} ` +
+    `${partes[4]}:${partes[5]}:${partes[6]}`;
+}
+
+console.log("dataBr:", dataBr);
+console.log("dataIso:", dataIso);
+     
 const { data, error } =
   await supabaseClient.rpc(
     "registrar_cupom",
