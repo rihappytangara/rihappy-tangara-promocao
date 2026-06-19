@@ -4,6 +4,191 @@
 
 let notaValidada = false;
 
+let urlNfceLida = "";
+
+const btnQrCode =
+    document.getElementById("btnQrCode");
+
+btnQrCode.addEventListener(
+    "click",
+    iniciarLeitorQr
+);
+
+async function iniciarLeitorQr() {
+
+    const reader =
+        document.getElementById("reader");
+
+    reader.style.display = "block";
+
+    const html5QrCode =
+        new Html5Qrcode("reader");
+
+    try {
+
+        await html5QrCode.start(
+            {
+                facingMode: "environment"
+            },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            async (textoLido) => {
+
+                await html5QrCode.stop();
+
+                reader.style.display = "none";
+
+                urlNfceLida = textoLido;
+
+                validarNfce(textoLido);
+
+            }
+        );
+
+    } catch (erro) {
+
+        reader.style.display = "none";
+
+        document.getElementById(
+            "dadosNota"
+        ).innerHTML = `
+            <div style="color:red;">
+                Não foi possível acessar a câmera.
+            </div>
+        `;
+
+        console.error(erro);
+    }
+
+}
+async function validarNfce(url) {
+
+    const dadosNota =
+        document.getElementById("dadosNota");
+
+    dadosNota.innerHTML = `
+        <div>
+            Validando NFC-e...
+        </div>
+    `;
+
+    try {
+
+        const resposta = await fetch(
+            "https://ksltubnnpphxqhjycdau.supabase.co/functions/v1/validar-nfce",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    url
+                })
+            }
+        );
+
+        const dados =
+            await resposta.json();
+
+        if (!dados.sucesso) {
+
+            notaValidada = false;
+
+            document
+                .getElementById("btnCadastrar")
+                .disabled = true;
+
+            dadosNota.innerHTML = `
+                <div style="color:red;">
+                    ${dados.erro}
+                </div>
+            `;
+
+            return;
+        }
+
+        document.getElementById(
+            "numero_nf"
+        ).value =
+            dados.numero_nf;
+
+        document.getElementById(
+            "valor_compra"
+        ).value =
+            dados.valor;
+
+        document.getElementById(
+            "chave_nf"
+        ).value =
+            dados.chave_nf;
+
+        document.getElementById(
+            "data_venda"
+        ).value =
+            dados.data_venda;
+
+        document.getElementById(
+            "emitente"
+        ).value =
+            dados.emitente;
+
+        notaValidada = true;
+
+        document
+            .getElementById("btnCadastrar")
+            .disabled = false;
+
+        dadosNota.innerHTML = `
+            <div style="color:green;">
+                <p>
+                    <strong>Empresa:</strong>
+                    ${dados.emitente}
+                </p>
+
+                <p>
+                    <strong>NFC-e:</strong>
+                    ${dados.numero_nf}
+                </p>
+
+                <p>
+                    <strong>Valor:</strong>
+                    R$ ${Number(dados.valor).toLocaleString(
+                        "pt-BR",
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    )}
+                </p>
+
+                <p>
+                    NFC-e validada com sucesso.
+                </p>
+            </div>
+        `;
+
+    } catch (erro) {
+
+        notaValidada = false;
+
+        document
+            .getElementById("btnCadastrar")
+            .disabled = true;
+
+        dadosNota.innerHTML = `
+            <div style="color:red;">
+                Erro ao validar NFC-e.
+            </div>
+        `;
+
+        console.error(erro);
+
+    }
+
+}
+
 document
 .getElementById("validarNota")
 .addEventListener("click", async () => {
@@ -242,10 +427,7 @@ document
                         "emitente"
                     ).value,
 
-                p_url_nfce:
-                    document.getElementById(
-                        "url_nfce"
-                    ).value
+p_url_nfce: urlNfceLida
 
             }
         );
