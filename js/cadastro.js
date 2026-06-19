@@ -325,3 +325,28 @@ document
 
     e.target.value = v;
   });
+
+function validarPeriodoPromocao() {
+
+  if (!CONFIG.PROMOCAO_ATIVA) {
+    return "Promoção encerrada.";
+  }
+
+  const hoje = new Date();
+
+  const inicio =
+    new Date(CONFIG.DATA_INICIO + "T00:00:00");
+
+  const fim =
+    new Date(CONFIG.DATA_FIM + "T23:59:59");
+
+  if (hoje < inicio) {
+    return "Promoção ainda não iniciou.";
+  }
+
+  if (hoje > fim) {
+    return "Promoção encerrada.";
+  }
+
+  return null;
+}
