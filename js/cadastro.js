@@ -9,6 +9,10 @@ document
   .getElementById("btnQrCode")
   .addEventListener("click", iniciarLeitorQr);
 
+document
+  .getElementById("btnValidarChave")
+  .addEventListener("click", validarPorChave);
+
 async function iniciarLeitorQr() {
 
   const reader =
@@ -50,6 +54,27 @@ async function iniciarLeitorQr() {
   }
 }
 
+async function validarPorChave() {
+
+  const chave = document
+    .getElementById("chaveManual")
+    .value
+    .replace(/\D/g, "");
+
+  if (chave.length !== 44) {
+
+    document.getElementById("dadosNota").innerHTML =
+      "<span style='color:red'>Digite os 44 dígitos da chave de acesso.</span>";
+
+    return;
+  }
+
+  urlNfceLida =
+    "https://www.sefaz.mt.gov.br/nfce/consultanfce?p=" + chave;
+
+  validarNfce(urlNfceLida);
+
+}
 /* =========================
    VALIDAR NFC-E
 ========================= */
