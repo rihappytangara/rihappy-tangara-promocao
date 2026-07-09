@@ -96,9 +96,13 @@ async function validarNfce(url) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          url
-        })
+body: JSON.stringify({
+  url,
+  chave: document
+            .getElementById("chaveManual")
+            ?.value
+            ?.replace(/\D/g, "")
+})
       }
     );
 
@@ -156,6 +160,9 @@ if (
     document.getElementById(
       "emitente"
     ).value = dados.emitente;
+
+     document.getElementById("chaveManual").value =
+  dados.chave_nf;
 
     notaValidada = true;
 
@@ -397,3 +404,14 @@ function validarPeriodoPromocao() {
 
   return null;
 }
+
+document
+  .getElementById("chaveManual")
+  .addEventListener("input", (e) => {
+
+    e.target.value =
+      e.target.value
+        .replace(/\D/g, "")
+        .substring(0, 44);
+
+  });
